@@ -1,0 +1,42 @@
+newmtl ryu:Mirror
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd Mirror_color.png
+Ni 1.00
+newmtl ryu:Mirror_3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd Mirror_3_color.png
+Ni 1.00
+newmtl ryu:Mirror_5
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd Mirror_4_color.png
+Ni 1.00
+newmtl ryu:body_1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd body_1_color.png
+Ni 1.00
+newmtl ryu:head_1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd head_1_color.png
+Ni 1.00
+newmtl ryu:leg_1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd leg_1_color_3.png
+Ni 1.00
