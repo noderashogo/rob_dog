@@ -1,7 +1,7 @@
 //=============================================================================
 //
-// Šâˆ— [rock.cpp]
-// Author : GP11A132 21 –ì›ãÄŒå
+// å²©å‡¦ç† [rock.cpp]
+// Author : GP11A132 21 é‡å¯ºç¿”æ‚Ÿ
 //
 //=============================================================================
 #include "main.h"
@@ -13,46 +13,46 @@
 
 
 //*****************************************************************************
-// ƒ}ƒNƒ’è‹`
+// ãƒã‚¯ãƒ­å®šç¾©
 //*****************************************************************************
-#define TEXTURE_MAX			(5)				// ƒeƒNƒXƒ`ƒƒ‚Ì”
+#define TEXTURE_MAX			(5)				// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ•°
 
-#define	ROCK_WIDTH			(50.0f)			// ’¸“_ƒTƒCƒY
-#define	ROCK_HEIGHT			(80.0f)			// ’¸“_ƒTƒCƒY
+#define	ROCK_WIDTH			(50.0f)			// é ‚ç‚¹ã‚µã‚¤ã‚º
+#define	ROCK_HEIGHT			(80.0f)			// é ‚ç‚¹ã‚µã‚¤ã‚º
 
-#define	MAX_ROCK			(256)			// –ØÅ‘å”
+#define	MAX_ROCK			(256)			// æœ¨æœ€å¤§æ•°
 
 //*****************************************************************************
-// \‘¢‘Ì’è‹`
+// æ§‹é€ ä½“å®šç¾©
 //*****************************************************************************
 typedef struct
 {
-	XMFLOAT3	pos;			// ˆÊ’u
-	XMFLOAT3	scl;			// ƒXƒP[ƒ‹
-	MATERIAL	material;		// ƒ}ƒeƒŠƒAƒ‹
-	float		fWidth;			// •
-	float		fHeight;		// ‚‚³
-	int			nIdxShadow;		// ‰eID
-	BOOL		use;			// g—p‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	XMFLOAT3	pos;			// ä½ç½®
+	XMFLOAT3	scl;			// ã‚¹ã‚±ãƒ¼ãƒ«
+	MATERIAL	material;		// ãƒãƒ†ãƒªã‚¢ãƒ«
+	float		fWidth;			// å¹…
+	float		fHeight;		// é«˜ã•
+	int			nIdxShadow;		// å½±ID
+	BOOL		use;			// ä½¿ç”¨ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 
 } ROCK;
 
 //*****************************************************************************
-// ƒvƒƒgƒ^ƒCƒvéŒ¾
+// ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
 //*****************************************************************************
 HRESULT MakeVertexRock(void);
 
 //*****************************************************************************
-// ƒOƒ[ƒoƒ‹•Ï”
+// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
 //*****************************************************************************
-static ID3D11Buffer					*g_VertexBuffer = NULL;	// ’¸“_ƒoƒbƒtƒ@
-static ID3D11ShaderResourceView		*g_Texture[TEXTURE_MAX] = { NULL };	// ƒeƒNƒXƒ`ƒƒî•ñ
+static ID3D11Buffer					*g_VertexBuffer = NULL;	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+static ID3D11ShaderResourceView		*g_Texture[TEXTURE_MAX] = { NULL };	// ãƒ†ã‚¯ã‚¹ãƒãƒ£æƒ…å ±
 
-static ROCK					g_aRock[MAX_ROCK];	// –Øƒ[ƒN
-static BOOL					g_bAlpaTest;		// ƒAƒ‹ƒtƒ@ƒeƒXƒgON/OFF
+static ROCK					g_aRock[MAX_ROCK];	// æœ¨ãƒ¯ãƒ¼ã‚¯
+static BOOL					g_bAlpaTest;		// ã‚¢ãƒ«ãƒ•ã‚¡ãƒ†ã‚¹ãƒˆON/OFF
 
-static int					g_TexNo;			// ƒeƒNƒXƒ`ƒƒ”Ô†
-static int					g_TexAnim;			// ƒeƒNƒXƒ`ƒƒƒAƒjƒ—p
+static int					g_TexNo;			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·
+static int					g_TexAnim;			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¢ãƒ‹ãƒ¡ç”¨
 
 static char *g_TextureName[] =
 {
@@ -64,13 +64,13 @@ static char *g_TextureName[] =
 };
 
 //=============================================================================
-// ‰Šú‰»ˆ—
+// åˆæœŸåŒ–å‡¦ç†
 //=============================================================================
 HRESULT InitRock(void)
 {
 	MakeVertexRock();
 
-	// ƒeƒNƒXƒ`ƒƒ¶¬
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”Ÿæˆ
 	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
 		g_Texture[i] = NULL;
@@ -84,7 +84,7 @@ HRESULT InitRock(void)
 
 	g_TexNo = g_TexAnim = 0;
 
-	// –Øƒ[ƒN‚Ì‰Šú‰»
+	// æœ¨ãƒ¯ãƒ¼ã‚¯ã®åˆæœŸåŒ–
 	for(int nCntRock = 0; nCntRock < MAX_ROCK; nCntRock++)
 	{
 		ZeroMemory(&g_aRock[nCntRock].material, sizeof(g_aRock[nCntRock].material));
@@ -100,7 +100,7 @@ HRESULT InitRock(void)
 	g_bAlpaTest = TRUE;
 	//g_nAlpha = 0x0;
 
-	// –Ø‚Ìİ’è
+	// æœ¨ã®è¨­å®š
 	SetRock(XMFLOAT3(0.0f, -10.0f, 0.0f), 60.0f, 90.0f, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	SetRock(XMFLOAT3(200.0f, -10.0f, 0.0f), 60.0f, 90.0f, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	SetRock(XMFLOAT3(-200.0f, -10.0f, 0.0f), 60.0f, 90.0f, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -111,28 +111,28 @@ HRESULT InitRock(void)
 }
 
 //=============================================================================
-// I—¹ˆ—
+// çµ‚äº†å‡¦ç†
 //=============================================================================
 void UninitRock(void)
 {
 	for(int nCntTex = 0; nCntTex < TEXTURE_MAX; nCntTex++)
 	{
 		if(g_Texture[nCntTex] != NULL)
-		{// ƒeƒNƒXƒ`ƒƒ‚Ì‰ğ•ú
+		{// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è§£æ”¾
 			g_Texture[nCntTex]->Release();
 			g_Texture[nCntTex] = NULL;
 		}
 	}
 
 	if(g_VertexBuffer != NULL)
-	{// ’¸“_ƒoƒbƒtƒ@‚Ì‰ğ•ú
+	{// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®è§£æ”¾
 		g_VertexBuffer->Release();
 		g_VertexBuffer = NULL;
 	}
 }
 
 //=============================================================================
-// XVˆ—
+// æ›´æ–°å‡¦ç†
 //=============================================================================
 void UpdateRock(void)
 {
@@ -141,14 +141,14 @@ void UpdateRock(void)
 	{
 		if(g_aRock[nCntRock].use)
 		{
-			// ‰e‚ÌˆÊ’uİ’è
+			// å½±ã®ä½ç½®è¨­å®š
 			SetPositionShadow(g_aRock[nCntRock].nIdxShadow, XMFLOAT3(g_aRock[nCntRock].pos.x, 0.1f, g_aRock[nCntRock].pos.z));
 		}
 	}
 
 
 #ifdef _DEBUG
-	// ƒAƒ‹ƒtƒ@ƒeƒXƒgON/OFF
+	// ã‚¢ãƒ«ãƒ•ã‚¡ãƒ†ã‚¹ãƒˆON/OFF
 	if(GetKeyboardTrigger(DIK_F1))
 	{
 		g_bAlpaTest = g_bAlpaTest ? FALSE: TRUE;
@@ -159,50 +159,50 @@ void UpdateRock(void)
 }
 
 //=============================================================================
-// •`‰æˆ—
+// æç”»å‡¦ç†
 //=============================================================================
 void DrawRock(void)
 {
-	// ƒ¿ƒeƒXƒgİ’è
+	// Î±ãƒ†ã‚¹ãƒˆè¨­å®š
 	if (g_bAlpaTest == TRUE)
 	{
-		// ƒ¿ƒeƒXƒg‚ğ—LŒø‚É
+		// Î±ãƒ†ã‚¹ãƒˆã‚’æœ‰åŠ¹ã«
 		SetAlphaTestEnable(TRUE);
 	}
 
-	// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ–³Œø
+	// ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’ç„¡åŠ¹
 	SetLightEnable(FALSE);
 
 	XMMATRIX mtxScl, mtxTranslate, mtxWorld, mtxView;
 	CAMERA *cam = GetCamera();
 
-	// ’¸“_ƒoƒbƒtƒ@İ’è
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡è¨­å®š
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 	GetDeviceContext()->IASetVertexBuffers(0, 1, &g_VertexBuffer, &stride, &offset);
 
-	// ƒvƒŠƒ~ƒeƒBƒuƒgƒ|ƒƒWİ’è
+	// ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ãƒˆãƒãƒ­ã‚¸è¨­å®š
 	GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	for(int i = 0; i < MAX_ROCK; i++)
 	{
 		if(g_aRock[i].use)
 		{
-			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX‚Ì‰Šú‰»
+			// ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã®åˆæœŸåŒ–
 			mtxWorld = XMMatrixIdentity();
 
-			// ƒrƒ…[ƒ}ƒgƒŠƒbƒNƒX‚ğæ“¾
+			// ãƒ“ãƒ¥ãƒ¼ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã‚’å–å¾—
 			mtxView = XMLoadFloat4x4(&cam->mtxView);
 
 
-			// ŠÖ”g‚Á‚½”Å
+			// é–¢æ•°ä½¿ã£ãŸç‰ˆ
 			//mtxWorld = XMMatrixInverse(nullptr, mtxView);
 			//mtxWorld.r[3].m128_f32[0] = 0.0f;
 			//mtxWorld.r[3].m128_f32[1] = 0.0f;
 			//mtxWorld.r[3].m128_f32[2] = 0.0f;
 
 
-			// ³•ûs—ñi’¼Œğs—ñj‚ğ“]’us—ñ‚³‚¹‚Ä‹ts—ñ‚ğì‚Á‚Ä‚é”Å(‘¬‚¢)
+			// æ­£æ–¹è¡Œåˆ—ï¼ˆç›´äº¤è¡Œåˆ—ï¼‰ã‚’è»¢ç½®è¡Œåˆ—ã•ã›ã¦é€†è¡Œåˆ—ã‚’ä½œã£ã¦ã‚‹ç‰ˆ(é€Ÿã„)
 			mtxWorld.r[0].m128_f32[0] = mtxView.r[0].m128_f32[0];
 			mtxWorld.r[0].m128_f32[1] = mtxView.r[1].m128_f32[0];
 			mtxWorld.r[0].m128_f32[2] = mtxView.r[2].m128_f32[0];
@@ -216,26 +216,26 @@ void DrawRock(void)
 			mtxWorld.r[2].m128_f32[2] = mtxView.r[2].m128_f32[2];
 
 
-			// ƒXƒP[ƒ‹‚ğ”½‰f
+			// ã‚¹ã‚±ãƒ¼ãƒ«ã‚’åæ˜ 
 			mtxScl = XMMatrixScaling(g_aRock[i].scl.x, g_aRock[i].scl.y, g_aRock[i].scl.z);
 			mtxWorld = XMMatrixMultiply(mtxWorld, mtxScl);
 
-			// ˆÚ“®‚ğ”½‰f
+			// ç§»å‹•ã‚’åæ˜ 
 			mtxTranslate = XMMatrixTranslation(g_aRock[i].pos.x, g_aRock[i].pos.y, g_aRock[i].pos.z);
 			mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
 
-			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX‚Ìİ’è
+			// ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã®è¨­å®š
 			SetWorldMatrix(&mtxWorld);
 
 
-			// ƒ}ƒeƒŠƒAƒ‹İ’è
+			// ãƒãƒ†ãƒªã‚¢ãƒ«è¨­å®š
 			SetMaterial(g_aRock[i].material);
 
-			// ƒeƒNƒXƒ`ƒƒİ’è
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£è¨­å®š
 			int texNo = i % TEXTURE_MAX;
-			if (i == 4)	// ‚T”Ô‚Ì–Ø‚¾‚¯ƒeƒNƒXƒ`ƒƒƒAƒjƒ‚³‚¹‚Ä‚İ‚é
+			if (i == 4)	// ï¼•ç•ªã®æœ¨ã ã‘ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¢ãƒ‹ãƒ¡ã•ã›ã¦ã¿ã‚‹
 			{
-				// ƒeƒNƒXƒ`ƒƒƒAƒjƒ‚Í‚±‚ñ‚ÈŠ´‚¶
+				// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¢ãƒ‹ãƒ¡ã¯ã“ã‚“ãªæ„Ÿã˜
 				g_TexAnim++;
 				if ((g_TexAnim % 16) == 0)
 				{
@@ -245,24 +245,24 @@ void DrawRock(void)
 			}
 			GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[texNo]);
 
-			// ƒ|ƒŠƒSƒ“‚Ì•`‰æ
+			// ãƒãƒªã‚´ãƒ³ã®æç”»
 			GetDeviceContext()->Draw(4, 0);
 		}
 	}
 
-	// ƒ‰ƒCƒeƒBƒ“ƒO‚ğ—LŒø‚É
+	// ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’æœ‰åŠ¹ã«
 	SetLightEnable(TRUE);
 
-	// ƒ¿ƒeƒXƒg‚ğ–³Œø‚É
+	// Î±ãƒ†ã‚¹ãƒˆã‚’ç„¡åŠ¹ã«
 	SetAlphaTestEnable(FALSE);
 }
 
 //=============================================================================
-// ’¸“_î•ñ‚Ìì¬
+// é ‚ç‚¹æƒ…å ±ã®ä½œæˆ
 //=============================================================================
 HRESULT MakeVertexRock(void)
 {
-	// ’¸“_ƒoƒbƒtƒ@¶¬
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DYNAMIC;
@@ -272,7 +272,7 @@ HRESULT MakeVertexRock(void)
 
 	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
 
-	// ’¸“_ƒoƒbƒtƒ@‚É’l‚ğƒZƒbƒg‚·‚é
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
 	D3D11_MAPPED_SUBRESOURCE msr;
 	GetDeviceContext()->Map(g_VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
@@ -281,25 +281,25 @@ HRESULT MakeVertexRock(void)
 	float fWidth = 60.0f;
 	float fHeight = 90.0f;
 
-	// ’¸“_À•W‚Ìİ’è
+	// é ‚ç‚¹åº§æ¨™ã®è¨­å®š
 	vertex[0].Position = XMFLOAT3(-fWidth / 2.0f, fHeight, 0.0f);
 	vertex[1].Position = XMFLOAT3(fWidth / 2.0f, fHeight, 0.0f);
 	vertex[2].Position = XMFLOAT3(-fWidth / 2.0f, 0.0f, 0.0f);
 	vertex[3].Position = XMFLOAT3(fWidth / 2.0f, 0.0f, 0.0f);
 
-	// –@ü‚Ìİ’è
+	// æ³•ç·šã®è¨­å®š
 	vertex[0].Normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 	vertex[1].Normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 	vertex[2].Normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 	vertex[3].Normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-	// ŠgUŒõ‚Ìİ’è
+	// æ‹¡æ•£å…‰ã®è¨­å®š
 	vertex[0].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[1].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[2].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W‚Ìİ’è
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™ã®è¨­å®š
 	vertex[0].TexCoord = XMFLOAT2(0.0f, 0.0f);
 	vertex[1].TexCoord = XMFLOAT2(1.0f, 0.0f);
 	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
@@ -311,7 +311,7 @@ HRESULT MakeVertexRock(void)
 }
 
 //=============================================================================
-// –Ø‚Ìƒpƒ‰ƒ[ƒ^‚ğƒZƒbƒg
+// å²©ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆ
 //=============================================================================
 int SetRock(XMFLOAT3 pos, float fWidth, float fHeight, XMFLOAT4 col)
 {
@@ -327,7 +327,7 @@ int SetRock(XMFLOAT3 pos, float fWidth, float fHeight, XMFLOAT4 col)
 			g_aRock[nCntRock].fHeight = fHeight;
 			g_aRock[nCntRock].use = TRUE;
 
-			// ‰e‚Ìİ’è
+			// å½±ã®è¨­å®š
 			g_aRock[nCntRock].nIdxShadow = CreateShadow(g_aRock[nCntRock].pos, 0.5f, 0.5f);
 
 			nIdxRock = nCntRock;
